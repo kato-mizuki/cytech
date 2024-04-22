@@ -23,8 +23,8 @@ class Product extends Model
         return $this->hasMany(Sale::class);
     }
 
-    public function company()
+    public function company(): BelongsToMany
     {
-    return $this->belongsTo(Company::class);
+     return $this->belongsToMany(Company::class);
     }
 }

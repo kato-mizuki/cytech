@@ -30,36 +30,16 @@ class ProductController extends Controller
             $query->where('product_name','LIKE',"%{$search}%");
         }
 
-        if($min_price = $request->min_price){
-            $query->where('price','>=', $min_price);
+        if($search = $request->search){
+            $query->where('company_name',  'LIKE', "%{$search}%");
         }
-
-        if($max_price = $request->max_price){
-            $query->where('price','<=', $max_price);
-        }
-
-        if($min_stock = $request->min_stock){
-            $query->where('stock','>=', $min_stock);
-        }
-
-        if($max_stock = $request->max_stock){
-            $query->where('price','<=', $max_stock);
-        }
-
-        //ソートが指定されている場合、そのカラムでソートを行う
-        if($sort = $request->sort){
-            $direction = $request->direction == 'desc' ? 'desc' : 'asc';
-            $query->orderBy($sort, $direction);
-        }
+    
         
-        //上記の条件(クエリ)に基づき商品を取得し、10件ごとにページネーションを適用
-        //Product=モデル名
         $products = $query->paginate(10);
-
-        //商品一覧を表示し、取得した商品情報ビューに渡す
-        //products=変数名
+    
+        // 商品一覧ビューを表示し、取得した商品情報をビューに渡す
         return view('products.index', ['products' => $products]);
-
+       
     }
 
     
@@ -92,66 +72,64 @@ class ProductController extends Controller
 
     //Create(作成)
      //store=データ新規保存
-    public function store(Request $request)
-    {
-        //商品新規登録画面
-        DB::beginTransaction();
-
-        //Request=送られてきたデータを変数へ
-        //->$validate=変数データが特定条件を満たしているかをチェック
-        //required=必須,nullable=未入力OK
-        try {
-            $request->validate([
-                'product_name' => 'required',
-                'company_id' => 'required',
-                'price' => 'required',
-                'stock' => 'required',
-                'comment' => 'nullable',
-                'img_path' => 'nullable|image|max:2048',
-                //2048=2メガバイト
-            ]);
-    
-            //新規登録ボタン
-    
-            //変数:$requestから情報取得
-            //new=新しいレコードを追加
-            $product = new Product([
-                'product_name' => $request->get('product_name'),
-                'company_id' => $request->get('company_id'),
-                'price' => $request->get('price'),
-                'stock' => $request->get('stock'),
-                'comment' => $request->get('comment'),
-            ]);
-    
-            //もし画像が含まれている場合、保存する
-            if($request->hasFile('img_path')){
-            //→アップロードファイルが存在しているかチェック
-    
-                $filename = $request->img_path->getClientOriginalName();
-                //→アップロードファイル名を取得
-    
-                $filePath = $request->img_path->storeAs('products', $filename, 'public');
-                //→特定の場所(storage/app/public/products)に特定の名前($filename)で保存
-                //products=保存先フォルダ名
-                //public=アクセス権限(公開設定=誰でもアクセスOk)
-    
-                $product->img_path = '/storage/' . $filePath;
-                //→保存場所(storage/app/public/products)、保存名
-            }
-    
-            //データベースに新しいレコードとして保存
-            $product->save();
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            return back();
-        }
-        
-        //全ての処理が終わったら商品一覧画面に戻る
-        return redirect('products');
-
-    }
-
+     public function store(Request $request) // フォームから送られたデータを　$requestに代入して引数として渡している
+     {
+         // リクエストされた情報を確認して、必要な情報が全て揃っているかチェックします。
+         // ->validate()メソッドは送信されたリクエストデータが
+         // 特定の条件を満たしていることを確認します。
+         $request->validate([
+             'product_name' => 'required', //requiredは必須という意味です
+             'company_id' => 'required',
+             'price' => 'required',
+             'stock' => 'required',
+             'comment' => 'nullable', //'nullable'はそのフィールドが未入力でもOKという意味です
+             'img_path' => 'nullable|image|max:2048',
+         ]);
+         // '|'はパイプと呼ばれる記号で、バリデーションルールを複数指定するときに使います
+         // 'image'はそのフィールドが画像ファイルであることを指定するルールです
+         // max:2048'は最大2048KB（2メガバイト）までという意味です
+         
+         // フォームが一部空欄のまま送信ボタンを押しても、フォームの画面にリダイレクトされ
+         // フォームの値が未入力である旨の警告メッセージが表示されます
+ 
+ 
+         // 新しく商品を作ります。そのための情報はリクエストから取得します。
+         $product = new Product([
+             'product_name' => $request->get('product_name'),
+             'company_id' => $request->get('company_id'),
+             'price' => $request->get('price'),
+             'stock' => $request->get('stock'),
+             'comment' => $request->get('comment'),
+         ]);
+         //new Product([]) によって新しい「Product」（レコード）を作成しています。
+         //new を使うことで新しいインスタンスを作成することができます
+ 
+ 
+ 
+         // リクエストに画像が含まれている場合、その画像を保存します。
+         if($request->hasFile('img_path')){ 
+             $filename = $request->img_path->getClientOriginalName();
+             $filePath = $request->img_path->storeAs('products', $filename, 'public');
+             $product->img_path = '/storage/' . $filePath;
+         }
+         // $request->hasFile('img_path')は、ブラウザにアップロードされたファイルが存在しているかを確認
+         // getClientOriginalName()はアップロードしたファイル名を取得するメソッドです。
+        // storeAs('products', $filename, 'public')は
+        //  アップロードされたファイルを特定の場所に特定の名前で保存するためのメソッドです
+        //　今回はstorage/app/publicにproducts" ディレクトリが作られ保存されます
+        //'products'：これはファイルを保存するディレクトリ（フォルダ）の名前を示しています。
+        // この場合は 'products' という名前のディレクトリにファイルが保存されます。
+     //$filename：これは保存するファイルの名前を示しています。
+     // getClientOriginalName() メソッドで取得したオリジナルのファイル名がここに入ります。
+     // 'public' ファイルのアクセス権限を示しています。'public' は公開設定で、誰でもこのファイルにアクセスすることができるようになります。
+ 
+         // 作成したデータベースに新しいレコードとして保存します。
+         $product->save();
+ 
+         // 全ての処理が終わったら、商品一覧画面に戻ります。
+         return redirect('products');
+     }
+ 
     /**
      * Display the specified resource.
      *
@@ -183,7 +161,7 @@ class ProductController extends Controller
     {
         //商品情報編集画面
 
-        $companies = Company::all();
+        $companies = Company::find($product->company_id);
         //→会社情報が必要
 
         return view('products.edit', compact('product', 'companies'));
