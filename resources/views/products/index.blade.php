@@ -45,8 +45,7 @@
                     <th>在庫数
                     </th>
                     <th>メーカー名</th>
-                    <th>{{-- "{{}}"←PHPコードを記載できる=ProductControllerのcreateメゾットを実行
-                      CCSフレームワーク(btn=要素をボタンにみせる基本的なスタイル、primary=青色、mb-3=margin-bottom(下)スペース(0~5) --}}
+                    <th>
                       <a href="{{ route('products.create') }}" class="btn btn-warning mb-3">新規登録</a>
                     </th>
                 </tr>

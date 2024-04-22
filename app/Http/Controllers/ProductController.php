@@ -157,11 +157,11 @@ class ProductController extends Controller
 
     //Update(更新)
     //edit=データ編集用フォーム表示
-    public function edit(Product $product)
+    public function edit(Product $product,Company $companies)
     {
         //商品情報編集画面
 
-        $companies = Company::find($product->company_id);
+        $companies = Company::with(['name']);
         //→会社情報が必要
 
         return view('products.edit', compact('product', 'companies'));
@@ -218,20 +218,18 @@ class ProductController extends Controller
 
     //Delete(削除)
     //destroy=データ削除
+        /**
+     * 削除処理
+     */
     public function destroy(Product $product)
+//(Product $product) 指定されたIDで商品をデータベースから自動的に検索し、その結果を $product に割り当てます。
     {
-        //削除ボタン
-        DB:beginTransaction();
+        // 商品を削除します。
+        $product->delete();
 
-        try {
-            $product->delete();
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            return back();
-        }
-
+        // 全ての処理が終わったら、商品一覧画面に戻ります。
         return redirect('/products');
-        
+        //URLの/productsを検索します
+        //products　/がなくても検索できます
     }
 }
