@@ -1,70 +1,54 @@
 @extends('layouts.app')
 
 @section('content')
-
 <div class="container">
-    <h2>新しい商品を追加</h2>
+    <h1 class="mb-4">商品新規登録</h1>
 
+    <a href="{{ route('products.index') }}" class="btn btn-primary mb-3">戻る</a>
 
- <form action="{{ route('store') }}" method="post" enctype="multipart/form-data">
-    @csrf
+    {{-- enctype="multipart/form-data=画像ファイルをアップロードする場合、必ず必要 --}}
+    <form method="POST" action=" {{ route('products.store') }}" enctype="multipart/form-data">
+        
+        @csrf
 
-    <div class="form-group">
-        <label for="product-name">商品名</label>
-        <input type="text" name="name" id="product-name" class="form-control">
-        @if ($errors->has('name'))
-          <p class="errors">{{ $errors->first('name') }}</p>
-        @endif
-    </div>
+        {{-- required=必須項目 --}}
+        <div class="mb-3">
+            <label for="product_name" class="form-label">商品名:</label>
+            <input type="text" name="product_name" id="product_name" class="form-control" required>
+        </div>
 
-    <div class="form-group">
-        <label for="product-company">メーカー</label>
-        <select name="company_id">
-            @foreach ($companies as $company)
-            <option value="{{ $company->id }}">{{ $company->name }}</option>
-            @endforeach
-        </select>
-        @if ($errors->has('company_id'))
-          <p class="errors">{{ $errors->first('company_id') }}</p>
-        @endif  
-    </div>
+        <div class="mb-3">
+            <label for="company_id" class="form-label">メーカー:</label>
+            <select class="form-select" id="company_id" name="company_id">
+                @foreach ($companies as $company)
+                    <option value="{{ $company->id }}">{{ $company->company_name }}</option>
+                @endforeach
+            </select>
+        </div>
 
-    <div class="form-group">
-        <label for="product-price">価格</label>
-        <input type="number" name="price" id="price" class="form-control">
-        @if ($errors->has('price'))
-          <p class="errors">{{ $errors->first('price') }}</p>
-        @endif
-    </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">価格:</label>
+            <input type="text" name="price" id="price" class="form-control" required>
+        </div>
 
-    <div class="form-group">
-        <label for="product-stock">在庫数</label>
-        <input type="number" name="stock" id="stock" class="form-control">
-        @if ($errors->has('stock'))
-          <p class="errors">{{ $errors->first('stock') }}</p>
-        @endif
-    </div>
+        <div class="mb-3">
+            <label for="stock" class="form-label">在庫数:</label>
+            <input type="text" name="stock" id="stock" class="form-control" required>
+        </div>
 
-    <div class="form-group">
-        <label for="product-comment">コメント</label>
-        <textarea name="comment" id="Comment" class="form-contorl"></textarea>
-    </div>
+        <div class="mb-3">
+            <label for="comment" class="form-label">コメント:</label>
+            <textarea name="comment" id="comment" class="form-control" rows="3" required></textarea>
+        </div>
 
-    <div class="form-group">
-        <label for="product-image_path">画像</label>
-        <input type="file" name="image_path" id="image_path" class="form-contorl">
-        @if ($errors->has('image_path'))
-          <p class="errors">{{ $errors->first('image_path') }}</p>
-        @endif
-    </div>
+        <div class="mb-3">
+            <label for="img_path" class="form-lavel">商品画像:</label>
+            <input type="file" name="img_path" id="img_path" class="form-control" required>
+        </div>
 
-    <div>
-        <button type="submit" class="btn btn-success">商品登録</button>
-    </div>
-
-    <div>
-        <a href="{{ route('list') }}">商品一覧に戻る</a>
-    </div>
- </form>
+        <button type="submit" class="btn btn-primary">登録</button>
+    </form>
+    
 </div>
+    
 @endsection

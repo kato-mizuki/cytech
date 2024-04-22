@@ -2,18 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
-    public function products() {
-        return $this->hasMany('App\Models\Product');
-    }
+    use HasFactory;
 
-    public function getAllCompanies() {
-
-        $companies = $this->all();
-
-        return $companies;
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
 }

@@ -1,6 +1,10 @@
 <?php
 
+//Controller場所を示すuse宣言が必要
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use Illuminate\Support\Facades\Auth;
+//↑↑Auth部品を使うために取り込みが必要、ユーザー認証(ログイン)に関する処理を行う
 
 /*
 |--------------------------------------------------------------------------
@@ -11,32 +15,37 @@ use App\Http\Controllers\ProductController;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
+
 */
 
+//get=ページを表示
 Route::get('/', function () {
-    return view('welcome');
+    //ウェブサイトのホームページ('/'のURL)にアクセスした場合
+
+    if (Auth::check()) {
+        //ログイン状態ならば、商品一覧ページへ
+        //該当のindexメゾットがあるController名の複数形にて記載する
+        return redirect()->route('products.index');
+
+        //ログイン状態でなければ、ログイン画面へ
+    } else{
+        return redirect()->route('login');
+    }
 });
-//Route::get('/', 'LoginController@')->name('list');
-
-Route::get('/list', 'ProductController@index')->name('list');
-
-Route::get('/search', 'ProductController@search')->name('search');
-
-Route::get('/create', 'ProductController@create')->name('create');
-
-Route::post('/list', 'ProductController@store')->name('store');
-
-Route::get('/list/{product}', 'ProductController@show')->name('show');
-
-Route::get('/edit/{product}', 'ProductController@edit')->name('edit');
-
-Route::put('/list/{product}', 'ProductController@update')->name('update');
-
-// Route::delete('/list/{product}', 'ProductController@destroy')->name('destroy');
-
-Route::post('/delete', 'ProductController@destroy')->name('destroy');
-
 
 Auth::routes();
+//↑↑Laravelが提供している機能
+//一般的な認証に関するルーティングを自動的に定義する
+//ログイン画面に用意されているビューのリンク先がこの１行でOK!!
 
-//Route::get('/home', 'HomeController@index')->name('home');
+//Route::group(['middleware' => 'auth'], function () {
+//    Route::resource('products', ProductController::class);
+//});
+
+Route::get('products',[App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
+Route::post('products',[App\Http\Controllers\ProductController::class, 'store'])->name('products.store');
+Route::get('products/create',[App\Http\Controllers\ProductController::class, 'create'])->name('products.create');
+Route::get('products/{product}',[App\Http\Controllers\ProductController::class, 'show'])->name('products.show');
+Route::put('products/{product}',[App\Http\Controllers\ProductController::class, 'update'])->name('products.update');
+Route::delete('products/{product}',[App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy');
+Route::get('products/{product}/edit',[App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit');
