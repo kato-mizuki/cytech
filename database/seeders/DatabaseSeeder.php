@@ -4,6 +4,10 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,5 +24,13 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        DB::table('companies')->insert([
+            'id' => 1,
+            'name' => 'flower',
+            'street_address' => '〒105-0011 東京都港区芝公園４丁目２−８',
+            'representative' => '加藤',
+        ]);
+        //自分で作成したデータの呼び出しをする
+        $this->call(CompanySeeder::class);
     }
 }

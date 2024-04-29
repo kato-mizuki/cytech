@@ -36,9 +36,10 @@ class ProductController extends Controller
     
         
         $products = $query->paginate(10);
+        $companies =Company::all();
     
         // 商品一覧ビューを表示し、取得した商品情報をビューに渡す
-        return view('products.index', ['products' => $products]);
+        return view('products.index', ['products' => $products, 'company' => $companies]);
        
     }
 
@@ -161,7 +162,7 @@ class ProductController extends Controller
     {
         //商品情報編集画面
 
-        $companies = Company::with(['name']);
+        $companies = Company::all();
         //→会社情報が必要
 
         return view('products.edit', compact('product', 'companies'));

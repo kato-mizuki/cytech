@@ -1,10 +1,10 @@
 {{-- 他のビュー内容を引継ぐための指示
-　layouts>app.blase.phpに使用されているHTMLや他コードをここに引き継ぎ
-　そこへ追加でコード記載となる --}}
+ layouts>app.blase.phpに使用されているHTMLや他コードをここに引き継ぎ
+ そこへ追加でコード記載となる --}}
 @extends('layouts.app')
 
 {{-- 追加内容を指定する(@section～@endsection)
-　layouts.app内の@yield('content')へ挿入--}}
+ layouts.app内の@yield('content')へ挿入--}}
 @section('content')
 <div class="container">
     <h1 class="mb-4">商品一覧画面</h1>
@@ -12,9 +12,8 @@
     
 
     <div class="search mt-5">
-        {{-- 検索フォーム／GETで商品一覧ルートにデータ送信  --}}
-        <form action="{{ route('products.index') }}" method="GET" class="form-inline row g-3
-        ">
+        {{-- 検索フォーム GETで商品一覧ルートにデータ送信  --}}
+        <form action="{{ route('products.index') }}" method="GET" class="form-inline row g-3">
             
             {{-- 以下、検索項目入力欄   --}}
             <div class="form-group col-sm-12 col-md-3">
@@ -23,7 +22,9 @@
 
             <!-- メーカー名の入力欄 -->
             <div class="col-sm-12 col-md-4">
-                <input type="select" name="search" class="form-control" placeholder="メーカー名" value="{{ request('search') }}">
+                <select name="medium" data-toggle="select">
+                    <input type="select" name="search" class="form-control" placeholder="メーカー名" value="{{ request('search') }}">
+                </select>
             </div>
 
             <div class="form-group col-sm-12 col-md-3">
@@ -59,7 +60,7 @@
                     <td>{{ $product->product_name }}</td>
                     <td>{{ $product->price }}</td>
                     <td>{{ $product->stock }}</td>
-                    <td>{{ $product->company_id }}</td>
+                    <td>{{ $product->company->name }}</td>
                     <td>
                         <a href="{{ route('products.show', $product) }}" class="btn btn-info btn-sm mx-1">詳細</a>
                         <form method="POST" action="{{ route('products.destroy', $product) }}" class="d-inline">
