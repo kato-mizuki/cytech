@@ -29,17 +29,19 @@ class ProductController extends Controller
         if($search = $request->search){
             $query->where('product_name','LIKE',"%{$search}%");
         }
+        $query = Company::query();
 
         if($search = $request->search){
-            $query->where('company_name',  'LIKE', "%{$search}%");
+            $query->where('name',  'LIKE', "%{$search}%");
         }
     
         
         $products = $query->paginate(10);
-        $companies =Company::all();
+        $companies = Company::all();
+
     
         // 商品一覧ビューを表示し、取得した商品情報をビューに渡す
-        return view('products.index', ['products' => $products, 'company' => $companies]);
+        return view('products.index', ['products' => $products], compact('companies', 'products'));
        
     }
 

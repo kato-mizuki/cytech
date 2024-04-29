@@ -26,7 +26,7 @@
             </label>
             <select class="form-select" id="company_id" name="company_id">
                  @foreach ($companies as $company)
-                    <option value="{{ $company->id }}">{{ $company->company_name }}</option>
+                    <option value="{{ $company->id }}">{{ $company->name }}</option>
                 @endforeach
             </select>
         </div>

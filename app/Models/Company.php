@@ -11,10 +11,6 @@ class Company extends Model
 
     public function products()
     {
-        Company::factory()
-        ->count(50)
-        ->hasPosts(1)
-        ->create();
         return $this->hasMany(Product::class);
     }
 }

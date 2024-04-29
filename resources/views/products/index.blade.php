@@ -55,13 +55,17 @@
             {{-- 繰り返し処理 --}}
             @foreach ($products as $product)
                 <tr>
-                    <td>{{ $product->company_id }}</td>
+                    <td>{{ $product->id }}</td>
                     <td><img src="{{ asset($product->img_path) }}" alt="商品画像" width="100"></td>
                     <td>{{ $product->product_name }}</td>
                     <td>{{ $product->price }}</td>
                     <td>{{ $product->stock }}</td>
-                    <td>{{ $product->company->name }}</td>
-                    <td>
+                    
+                    <td class="{{ $product->company_id }}"> 
+                        @foreach ($companies as $company)
+                            {{ $company->name }}</td>
+                        @endforeach
+                   <td>
                         <a href="{{ route('products.show', $product) }}" class="btn btn-info btn-sm mx-1">詳細</a>
                         <form method="POST" action="{{ route('products.destroy', $product) }}" class="d-inline">
                             @csrf
@@ -70,7 +74,7 @@
                         </form>
                     </td>
                 </tr>
-            @endforeach
+                @endforeach
             </tbody>
         </table>
     </div>

@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+       
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
@@ -29,8 +29,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'flower',
             'street_address' => '〒105-0011 東京都港区芝公園４丁目２−８',
             'representative' => '加藤',
+
+            'id' => '2',
+            'name' => 'tree',
+            'street_address' => '東京都港区芝公園４丁目２−８',
+            'representative' => '瑞貴'
         ]);
-        //自分で作成したデータの呼び出しをする
-        $this->call(CompanySeeder::class);
     }
 }
