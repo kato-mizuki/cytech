@@ -23,7 +23,10 @@
             <!-- メーカー名の入力欄 -->
             <div class="col-sm-12 col-md-4">
                 <select name="medium" data-toggle="select">
-                    <input type="select" name="search" class="form-control" placeholder="メーカー名" value="{{ request('search') }}">
+                <option disabled style='display:none;' @if (empty($post->company_name)) selected @endif>メーカー名</option>
+                    @foreach($companies as $company)
+                        <option value="{{ $company->name}}" @if (isset($post->company_name) && ($post->company_name === $company->name)) selected @endif>{{ $company->name }}</option>
+                    @endforeach
                 </select>
             </div>
 
@@ -77,12 +80,6 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
-
-    <div class="mb-4">
-        {{-- appends()=ページを移動しても条件を忘れないようにする
-            ViewかControllerどちらかに記載しておけば機能する--}}
-        {{ $products->appends(request()->query())->links() }}
     </div>
 </div>
 @endsection

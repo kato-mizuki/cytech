@@ -37,8 +37,8 @@ class ProductController extends Controller
     
         
         $products = $query->paginate(10);
+        $products = Product::all();
         $companies = Company::all();
-
     
         // 商品一覧ビューを表示し、取得した商品情報をビューに渡す
         return view('products.index', ['products' => $products], compact('companies', 'products'));
@@ -142,12 +142,14 @@ class ProductController extends Controller
 
      //Read(読み取り)
      //show=データ個別表示
-    public function show(Product $product)
+    public function show($id)
     {
         //商品情報詳細画面
         //指定されたIDでデータベースから検索する
+        $product = Product::find($id);
+        $companies = Company::find($id);
 
-        return view('products.show', ['product' => $product]);
+        return view('products.show',compact('companies','product') );
 
     }
 
@@ -224,15 +226,20 @@ class ProductController extends Controller
         /**
      * 削除処理
      */
-    public function destroy(Product $product)
-//(Product $product) 指定されたIDで商品をデータベースから自動的に検索し、その結果を $product に割り当てます。
+    public function destroy($id)
     {
-        // 商品を削除します。
-        $product->delete();
+        try {
+            $product = Product::find($id);
+            $product_id = $product->id;
+            $product->delete();
 
-        // 全ての処理が終わったら、商品一覧画面に戻ります。
-        return redirect('/products');
-        //URLの/productsを検索します
-        //products　/がなくても検索できます
+            return to_route('/products');
+
+        }catch (\Exception $e){
+            report($e);
+            session()->flash('flash_message', '更新が失敗しました');
+        }
+        return redirect()->route('products.index')
+            ->with('success', 'Product deleted successfully');
     }
 }

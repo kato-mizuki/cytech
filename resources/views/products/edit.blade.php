@@ -25,9 +25,9 @@
                                  <span class="required" style="color:red">*</span>
                                 </label>
                                 <select name="company_id" id="company_id" class="form-select">
-                                    @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}" {{ $product->company_id == $company->id ? 'selected' : '' }}>{{ $company->company_name }}</option>
-                                    @endforeach
+                                @foreach ($companies as $company)
+                                    <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                @endforeach
                                 </select>
                             </div>
 
