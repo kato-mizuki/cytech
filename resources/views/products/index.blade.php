@@ -23,9 +23,9 @@
             <!-- メーカー名の入力欄 -->
             <div class="col-sm-12 col-md-4">
                 <select name="medium" data-toggle="select">
-                <option disabled style='display:none;' @if (empty($post->company_name)) selected @endif>メーカー名</option>
-                    @foreach($companies as $company)
-                        <option value="{{ $company->name}}" @if (isset($post->company_name) && ($post->company_name === $company->name)) selected @endif>{{ $company->name }}</option>
+                    <option disabled style='display:none;' @if (empty($post->company_name)) selected @endif>メーカー名</option>
+                    @foreach ($companies as $company)
+                        <option value="{{ $company->id }}">{{ $company->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -64,9 +64,11 @@
                     <td>{{ $product->price }}</td>
                     <td>{{ $product->stock }}</td>
                     
-                    <td class="{{ $product->company_id }}"> 
+                    <td>
                         @foreach ($companies as $company)
-                            {{ $company->name }}</td>
+                            @if($product->company_id === $company->id)
+                                {{ $company->name }}
+                            @endif
                         @endforeach
                    <td>
                         <a href="{{ route('products.show', $product) }}" class="btn btn-info btn-sm mx-1">詳細</a>

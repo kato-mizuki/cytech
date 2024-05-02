@@ -14,7 +14,13 @@
         <dd class="col-sm-9">{{ $product->product_name }}</dd>
 
         <dt class="col-sm-3">メーカー名</dt>
-        <dd class="col-sm-9">{{ $companies->name }}</dd>
+        <dd class="col-sm-9">
+        @foreach ($companies as $company)
+            @if($product->company_id === $company->id)
+                 {{ $company->name }}
+            @endif
+        @endforeach
+        </dd>
         
         <dt class="col-sm-3">価格</dt>
         <dd class="col-sm-9">{{ $product->price }}</dd>

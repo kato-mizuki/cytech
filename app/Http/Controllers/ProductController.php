@@ -22,6 +22,8 @@ class ProductController extends Controller
     //メゾット→index=データ一覧表示
     public function index(Request $request)
     {
+        $products = Product::all();
+        $companies = Company::get();
         //Productモデルに基づいて操作要求(クリエ)を初期化
         //この行の後にクエリを逐次構築
         $query = Product::query();
@@ -29,7 +31,6 @@ class ProductController extends Controller
         if($search = $request->search){
             $query->where('product_name','LIKE',"%{$search}%");
         }
-        $query = Company::query();
 
         if($search = $request->search){
             $query->where('name',  'LIKE', "%{$search}%");
@@ -38,7 +39,7 @@ class ProductController extends Controller
         
         $products = $query->paginate(10);
         $products = Product::all();
-        $companies = Company::all();
+        $companies = Company::get();
     
         // 商品一覧ビューを表示し、取得した商品情報をビューに渡す
         return view('products.index', ['products' => $products], compact('companies', 'products'));
@@ -147,7 +148,7 @@ class ProductController extends Controller
         //商品情報詳細画面
         //指定されたIDでデータベースから検索する
         $product = Product::find($id);
-        $companies = Company::find($id);
+        $companies = Company::all();
 
         return view('products.show',compact('companies','product') );
 
@@ -162,10 +163,9 @@ class ProductController extends Controller
 
     //Update(更新)
     //edit=データ編集用フォーム表示
-    public function edit(Product $product,Company $companies)
+    public function edit($id)
     {
-        //商品情報編集画面
-
+        $product = Product::find($id);
         $companies = Company::all();
         //→会社情報が必要
 

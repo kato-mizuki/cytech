@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             'street_address' => '〒105-0011 東京都港区芝公園４丁目２−８',
             'representative' => '加藤',
 
-            'id' => '2',
+            'id' => 2,
             'name' => 'tree',
             'street_address' => '東京都港区芝公園４丁目２−８',
             'representative' => '瑞貴'
