@@ -25,7 +25,7 @@
                 <select name="medium" data-toggle="select">
                     <option disabled style='display:none;' @if (empty($post->company_name)) selected @endif>メーカー名</option>
                     @foreach ($companies as $company)
-                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                        <option value="{{ $company->id }}">{{ $company->company_name }}</option>
                     @endforeach
                 </select>
             </div>

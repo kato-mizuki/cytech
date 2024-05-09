@@ -26,7 +26,7 @@
                                 </label>
                                 <select name="company_id" id="company_id" class="form-select">
                                     @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}" @if($product->company_id == $company->id) selected @endif>{{ $company->name }}</option>
+                                        <option value="{{ $company->id }}" @if($product->company_id == $company->id) selected @endif>{{ $company->company_name }}</option>
                                     @endforeach
                                 </select>
                             </div>

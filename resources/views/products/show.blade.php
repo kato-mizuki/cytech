@@ -17,7 +17,7 @@
         <dd class="col-sm-9">
         @foreach ($companies as $company)
             @if($product->company_id === $company->id)
-                 {{ $company->name }}
+                 {{ $company->company_name }}
             @endif
         @endforeach
         </dd>
