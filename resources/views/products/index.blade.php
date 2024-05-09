@@ -67,7 +67,7 @@
                     <td>
                         @foreach ($companies as $company)
                             @if($product->company_id === $company->id)
-                                {{ $company->name }}
+                                {{ $company->company_name }}
                             @endif
                         @endforeach
                    <td>
