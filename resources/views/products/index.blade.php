@@ -29,6 +29,14 @@
                     @endforeach
                 </select>
             </div>
+            <div>
+                <input type="number" name="min_price" id="minPrice" placeholder="最低価格">
+                <input type="number" name="max_price" id="maxPrice" placeholder="最高価格">
+            </div>
+            <div>
+                <input type="number" name="min_stock" id="minStock" placeholder="最低在庫数">
+                <input type="number" name="max_stock" id="maxStock" placeholder="最高在庫数">
+            </div>
 
             <div class="form-group col-sm-12 col-md-3">
                 <button class="btn btn-outline-secondary" type="submit">検索</button>
@@ -72,11 +80,12 @@
                         @endforeach
                    <td>
                         <a href="{{ route('products.show', $product) }}" class="btn btn-info btn-sm mx-1">詳細</a>
-                        <form method="POST" action="{{ route('products.destroy', $product) }}" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm mx-1">削除</button>
-                        </form>
+                    <!-- <form action="{{ route('products.destroy', $product->id) }}" method="POST"> -->
+                    <!-- <form> -->
+                    @csrf
+                        @method('DELETE')
+                            <button data-product_id="{{ $product->id }}" type="submit" class="btn btn-danger btn-sm mx-1">削除</button>
+                    <!-- </form> -->
                     </td>
                 </tr>
                 @endforeach

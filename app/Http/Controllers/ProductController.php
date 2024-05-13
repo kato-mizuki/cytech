@@ -237,7 +237,7 @@ class ProductController extends Controller
 
         }catch (\Exception $e){
             report($e);
-            session()->flash('flash_message', '更新が失敗しました');
+            session()->flash('flash_message', '削除が失敗しました');
         }
         return redirect()->route('products.index')
             ->with('success', 'Product deleted successfully');
