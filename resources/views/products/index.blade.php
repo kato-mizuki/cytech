@@ -44,53 +44,56 @@
 
         </form>
     </div>
+    
 
     <div class="products mt-5">
-        <table class="table table-striped">
+    <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>商品画像</th>
-                    <th>商品名</th>
-                    <th>価格
-                    </th>
-                    <th>在庫数
-                    </th>
-                    <th>メーカー名</th>
+                    <th scope="col">@sortablelink('id', 'ID')</th>
+                    <th scope="col">@sortablelink('img_path', '商品画像')</th>
+                    <th scope="col">@sortablelink('product_name', '商品名')</th>
+                    <th scope="col">@sortablelink('price', '価格')</th>
+                    <th scope="col">@sortablelink('stock', '在庫数')</th>
+                    <th scope="col">@sortablelink('company_name', 'メーカー名')</th>
                     <th>
-                      <a href="{{ route('products.create') }}" class="btn btn-warning mb-3">新規登録</a>
+                        <a href="{{ route('products.create') }}" class="btn btn-warning mb-3">新規登録</a>
                     </th>
                 </tr>
             </thead>
-            <tbody>
-            {{-- 繰り返し処理 --}}
-            @foreach ($products as $product)
-                <tr>
-                    <td>{{ $product->id }}</td>
-                    <td><img src="{{ asset($product->img_path) }}" alt="商品画像" width="100"></td>
-                    <td>{{ $product->product_name }}</td>
-                    <td>{{ $product->price }}</td>
-                    <td>{{ $product->stock }}</td>
-                    
-                    <td>
+            <tbody id="productList">
+                <h2>検索結果</h2>
+                @foreach($products as $product)
+                  <tr class="table-row" data-id="{{ $product->id }}">
+                    <td class="table-data">{{ $product->id }}</td>
+                    <td class="table-data"><img width="100px" src="{{ asset('storage/' . $product->img_path) }}"></td>
+                    <td class="table-data">{{ $product->product_name }}</td>
+                    <td class="table-data">{{ $product->price }}</td>
+                    <td class="table-data">{{ $product->stock }}</td>
+                    <td class="table-data">
                         @foreach ($companies as $company)
                             @if($product->company_id === $company->id)
                                 {{ $company->company_name }}
                             @endif
                         @endforeach
                    <td>
-                        <a href="{{ route('products.show', $product) }}" class="btn btn-info btn-sm mx-1">詳細</a>
-                    <!-- <form action="{{ route('products.destroy', $product->id) }}" method="POST"> -->
-                    <!-- <form> -->
-                    @csrf
-                        @method('DELETE')
-                            <button data-product_id="{{ $product->id }}" type="submit" class="btn btn-danger btn-sm mx-1">削除</button>
-                    <!-- </form> -->
+
+                    <td class="table-data"><a href="{{ route('products.show', $product->id) }}" class="btn btn-info btn-sm">詳細</a></td>
+                    <td class="table-data">
+                         <form method="POST" action="{{ route('products.destroy', $product->id) }}" class="delete-form">
+                         @csrf
+                         @method('DELETE')
+                          <button data-id="{{ $product->id }}" type="submit" data-url="{{ route('products.destroy', $product->id) }}" class="btn btn-warning btn-sm btn-delete">削除</button>
+                        </form>
                     </td>
-                </tr>
+                    <td class="table-data">
+                       <a href="{{ route('cart', ['id' => $product->id]) }}" class="btn btn-success btn-sm">購入</a>
+                    </td>
+                  </tr>
                 @endforeach
             </tbody>
         </table>
+       
     </div>
 </div>
 @endsection

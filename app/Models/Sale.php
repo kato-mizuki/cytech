@@ -2,48 +2,47 @@
 
 namespace App\Models;
 
+//use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Sale extends Model
-{
-    public function products()
-    {
-        return $this->belongsTo('App\Models\Product');
+class Sale extends Model{
+    //リレーション
+    public function product(){
+        return $this->belongsTo(Product::class);
+      }//6/20
+    
+      public function detail($id) {
+        $products = DB::table('products')
+            ->where('id', $id)
+            ->first();
+        return $products;
     }
-    /*
-    public static function purchase($productId){ //$productsは仮。controllerで記述した変数を入れる
-        // dd($productId);
 
-        try{
-            DB::beginTransaction();
+    public function purchase($quantity, $id) {
+        $product = DB::table('products')
+            ->where('id', $id)
+            ->first();
+        if($product->stock >= $quantity) {
+            $product->stock -= $quantity;
 
-                $product = Product::find($productId); //リクエストから商品IDを取得
+            DB::table('products')
+                ->where('id', $id)
+                ->update([
+                    'stock' => $product->stock
+                ]);
 
-                if(!$product) {
-                    DB::rollBack();
-                    return response()->json(['error' => '商品が存在しません']);
-                }
+            DB::table('sales')
+                ->insert([
+                    'product_id' => $id,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);  
+             return 'success';
 
-                if($product->stock <= 0) {
-                    DB::rollBack();
-                    return response()->json(['error' => '在庫が不足しています']);
-                }
-                //Productsテーブルの在庫数を減らす
-                $product->stock -= 1;
-                $product->save();
-
-                $sale = new Sale();
-                $sale->product_id = $product->id;
-                $sale->save();
-
-            DB::commit();
-            return ['success' => true];
-        
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return ['error' => '購入処理に失敗しました'];
+        } else {
+            return 'out of order';
         }
+   
     }
-    */
 }

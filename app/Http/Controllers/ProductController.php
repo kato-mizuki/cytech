@@ -40,9 +40,11 @@ class ProductController extends Controller
         $products = $query->paginate(10);
         $products = Product::all();
         $companies = Company::get();
+        $products = Product::sortable()->get(); //sortable() を先に宣言
+       
     
         // 商品一覧ビューを表示し、取得した商品情報をビューに渡す
-        return view('products.index', ['products' => $products], compact('companies', 'products'));
+        return view('products.index', ['products' => $products], compact('companies', 'products'))->with('products', $products);
        
     }
 
@@ -242,4 +244,28 @@ class ProductController extends Controller
         return redirect()->route('products.index')
             ->with('success', 'Product deleted successfully');
     }
+    public function cart($id) {
+        $sale_model = new Sales();
+        $product = $sale_model->detail($id);            
+        return view('cart',['product' => $product]);       
+    }
+
+    public function purchase(Request $request, $id) {
+        $quantity = $request->input('quantity');
+        DB::beginTransaction();
+
+        try {
+            $sale_model = new Sale();
+            $message = $sale_model->purchase($quantity, $id);   
+            DB::commit();
+        } catch (\Exception $e){
+            DB::rollback();
+            return back();
+
+        }
+        return response()->json([
+            'message' => $message
+        ]);
+
+ }
 }

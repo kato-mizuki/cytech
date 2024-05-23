@@ -10,10 +10,13 @@ use Illuminate\Support\Facades\DB;
 
 class SalesController extends Controller
 {
-    public function purchase(Request $request) {
-
+  public function purchase(Request $request, $id) {
+    $quantity = $request->input('quantity');
+    DB::beginTransaction();
         try{
             DB::beginTransaction();
+              $sale_model = new Sales();
+              $message = $sale_model->purchase($quantity, $id); 
 
               //リクエストから商品IDを取得
               $productId = $request->input('product_id');
@@ -31,14 +34,8 @@ class SalesController extends Controller
               }
               //Productsテーブルの在庫数を減らす
               $product->stock -= 1;
-              $product->save();
-
-              $sale = new Sale();
-              $sale->product_id = $product->id;
-              $sale->save();
-
-            DB::commit();
-            return ['success' => true];
+              $product->save();  
+              DB::commit();
 
         } catch (\Exception $e) {
             DB::rollBack();
