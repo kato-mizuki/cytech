@@ -32,6 +32,6 @@
 
     <!-- 戻るボタン -->
     <div class="back-page">
-            <a class="btn btn-primary" href="{{ route('products_index') }}">戻る</a>
+            <a class="btn btn-primary" href="{{ route('products.index') }}">戻る</a>
     </div>
 @endsection 

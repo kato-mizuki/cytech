@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 //使用するモデルを記載
 use App\Models\Product;
 use App\Models\Company;
+use App\Models\Sale;
+use App\Http\Controllers\SalesController;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
@@ -245,8 +247,8 @@ class ProductController extends Controller
             ->with('success', 'Product deleted successfully');
     }
     public function cart($id) {
-        $sale_model = new Sales();
-        $product = $sale_model->detail($id);            
+        $sale_model = new SalesController();
+        $product = Product::find($id);          
         return view('cart',['product' => $product]);       
     }
 
@@ -255,7 +257,7 @@ class ProductController extends Controller
         DB::beginTransaction();
 
         try {
-            $sale_model = new Sale();
+            $sale_model = new SalesController();
             $message = $sale_model->purchase($quantity, $id);   
             DB::commit();
         } catch (\Exception $e){
