@@ -252,22 +252,36 @@ class ProductController extends Controller
         return view('cart',['product' => $product]);       
     }
 
-    public function purchase(Request $request, $id) {
-        $quantity = $request->input('quantity');
-        DB::beginTransaction();
-
-        try {
-            $sale_model = new SalesController();
-            $message = $sale_model->purchase($quantity, $id);   
-            DB::commit();
-        } catch (\Exception $e){
-            DB::rollback();
-            return back();
-
-        }
-        return response()->json([
-            'message' => $message
+    public function purchase(Request $request,$id) {
+        // バリデーション
+        $validated = $request->validate([
+            'quantity' => 'required|integer|min:1',
+            'user_id' => 'required|exists:users,id',
         ]);
 
- }
+        // 商品情報の取得
+        $product = Product::find($id);
+
+        if (!$product) {
+            return response()->json(['message' => '商品が見つかりません。'], 404);
+        }
+
+        // 在庫チェック
+        if ($product->stock < $validated['quantity']) {
+            return response()->json(['message' => '在庫が不足しています。'], 400);
+        }
+
+        // 注文の作成
+        $sale = Sale::create([
+            'product_id' => $id,
+            'quantity' => $validated['quantity'],
+            'total_price' => $product->price * $validated['quantity'],
+        ]);
+
+        // 在庫の更新
+        $product->stock -= $validated['quantity'];
+        $product->save();
+
+        return response()->json(['message' => '購入が成功しました。', 'sale' => $sale], 201);
+    }
 }

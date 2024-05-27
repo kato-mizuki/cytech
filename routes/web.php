@@ -50,4 +50,3 @@ Route::put('products/{id}',[App\Http\Controllers\ProductController::class, 'upda
 Route::delete('products/{id}',[App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy');
 Route::get('products/{id}/edit',[App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit');
 Route::get('/cart/{id}', [App\Http\Controllers\ProductController::class, 'cart'])->name('cart');
-Route::post('/purchase/{id}', [App\Http\Controllers\ProductController::class, 'purchase'])->name('purchase');

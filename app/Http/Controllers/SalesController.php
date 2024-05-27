@@ -11,7 +11,7 @@ use App\Http\Controllers\SalesController;
 
 class SalesController extends Controller
 {
-  public function purchase(Request $request, $id) {
+  public function purchase(Request $request,Product $id) {
     $quantity = $request->input('quantity');
     DB::beginTransaction();
         try{
@@ -20,7 +20,7 @@ class SalesController extends Controller
               $message = $sale_model->purchase($quantity, $id); 
 
               //リクエストから商品IDを取得
-              $productId = $request->input('product_id');
+              $productId = $request->input('products_id');
               // dd($request);
               $product = Product::find($productId); //リクエストから商品IDを取得
 
