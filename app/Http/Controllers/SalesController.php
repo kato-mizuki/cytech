@@ -6,21 +6,21 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\SalesController;
+use App\Http\Controllers\ProductController;
 
 
 class SalesController extends Controller
 {
-  public function purchase(Request $request,Product $id) {
+  public function purchase(Request $request) {
     $quantity = $request->input('quantity');
     DB::beginTransaction();
         try{
             DB::beginTransaction();
-              $sale_model = new Sales();
-              $message = $sale_model->purchase($quantity, $id); 
+              $sale_model = new Salescontroller();
+              $message = $sale_model->purchase($quantity); 
 
               //リクエストから商品IDを取得
-              $productId = $request->input('products_id');
+              $productId = $request->input('product_id');
               // dd($request);
               $product = Product::find($productId); //リクエストから商品IDを取得
 
@@ -42,6 +42,8 @@ class SalesController extends Controller
             DB::rollBack();
             return ['error' => '購入処理に失敗しました'];
         }
+        return redirect()->route('products.index');
+
         /*
         if(isset($result->success)) {
             return response()->json($result, 200);

@@ -7,7 +7,7 @@
 <div class="row justify-content-center">
     <div class="col-md-12 col-md-offset-2">
             <div class="wrapper">
-                <form method="post" action="{{ route('purchase', ['id' => $product->id]) }}" enctype="multipart/form-data">  
+                <form method="post" action="{{ route('purchase')}}" enctype="multipart/form-data">  
                     @csrf              
                     <div>
                         <img class="purchase-img" width="180px" src="{{ asset('storage/' . $product->img_path) }}">
