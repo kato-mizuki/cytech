@@ -20,7 +20,7 @@ class CreateProductsTable extends Migration
             $table->integer('stock')->unsigned();
             $table->integer('company_id')->unsigned()->constrained('companies');
             $table->text('comment');
-            $table->text('img_path');
+            $table->string('img_path');
             //$table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
