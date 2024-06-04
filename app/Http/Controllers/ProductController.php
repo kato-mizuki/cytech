@@ -26,10 +26,19 @@ class ProductController extends Controller
     {
         $products = Product::all();
         $companies = Company::get();
+        // 商品一覧ビューを表示し、取得した商品情報をビューに渡す
+        return view('products.index', ['products' => $products], compact('companies', 'products'))->with('products', $products);
+    }
+
+        public function search(Request $request)
+    {
         //Productモデルに基づいて操作要求(クリエ)を初期化
         //この行の後にクエリを逐次構築
         $query = Product::query();
-
+        $query = $request->input('query');
+        
+        // 検索処理
+        $results = YourModel::where('name', 'LIKE', "%{$query}%")->get();
         if($search = $request->search){
             $query->where('product_name','LIKE',"%{$search}%");
         }
@@ -42,12 +51,10 @@ class ProductController extends Controller
         $products = $query->paginate(10);
         $products = Product::all();
         $companies = Company::get();
-        $products = Product::sortable()->get(); //sortable() を先に宣言
-       
-    
-        // 商品一覧ビューを表示し、取得した商品情報をビューに渡す
-        return view('products.index', ['products' => $products], compact('companies', 'products'))->with('products', $products);
-       
+        $products = Product::sortable()->get(); //sortable() を先に宣言 
+        return response()->json([
+            'list' => view('products.index', ['products' => $products])->render()
+        ]);
     }
 
     
