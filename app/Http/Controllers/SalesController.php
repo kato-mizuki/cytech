@@ -11,45 +11,44 @@ use App\Http\Controllers\ProductController;
 
 class SalesController extends Controller
 {
-  public function purchase(Request $request) {
-    $quantity = $request->input('quantity');
-    DB::beginTransaction();
-        try{
-            DB::beginTransaction();
-              $sale_model = new Salescontroller();
-              $message = $sale_model->purchase($quantity); 
+  public function purchase(Request $request)
+  {
+      // バリデーション（省略）
 
-              //リクエストから商品IDを取得
-              $productId = $request->input('product_id');
-              // dd($request);
-              $product = Product::find($productId); //リクエストから商品IDを取得
+      $productId = $request->input('product_id');
+      $quantity = $request->input('quantity');
 
-              if(!$product) {
-                DB::rollBack();
-                return response()->json(['error' => '商品が存在しません']);
-              }
+      // トランザクションを開始
+      DB::beginTransaction();
 
-              if($product->stock <= 0) {
-                DB::rollBack();
-                return response()->json(['error' => '在庫が不足しています']);
-              }
-              //Productsテーブルの在庫数を減らす
-              $product->stock -= 1;
-              $product->save();  
-              DB::commit();
+      try {
+          // 在庫チェック
+          $product = Product::find($productId);
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return ['error' => '購入処理に失敗しました'];
-        }
-        return redirect()->route('products.index');
+          if ($product->stock < $quantity) {
+              return response()->json(['error' => '在庫が不足しています。'], 400);
+          }
 
-        /*
-        if(isset($result->success)) {
-            return response()->json($result, 200);
-        } else {
-            return response()->json($result, 400);
-        }
-        */
-    }
+          // salesテーブルに登録
+          $sale = new Sale();
+          $sale->product_id = $productId;
+          $sale->quantity = $quantity;
+          $sale->save();
+
+          // 在庫を減算
+          $product->stock -= $quantity;
+          $product->save();
+
+          // トランザクションをコミット
+          DB::commit();
+
+          return response()->json(['success' => '購入が完了しました。']);
+
+      } catch (\Exception $e) {
+          // エラーが発生した場合はトランザクションをロールバック
+          DB::rollBack();
+          return response()->json(['error' => '購入処理中にエラーが発生しました。'], 500);
+      }
+      return redirect()->route('products.index');
+  }
 }

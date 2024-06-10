@@ -22,7 +22,7 @@
         let homeUrl = '{{ asset("storage") }}';
         console.log(homeUrl);
     </script>
-    <script src="{{ asset('js/search.js') }}" defer></script>
+    <script src="{{ asset('public/index.js') }}" defer></script>
     <script src="{{ asset('js/delete.js') }}" defer></script>
 
     <!-- Fonts -->
