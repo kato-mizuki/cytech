@@ -35,25 +35,41 @@ class ProductController extends Controller
         //Productモデルに基づいて操作要求(クリエ)を初期化
         //この行の後にクエリを逐次構築
         $query = Product::query();
-        $query = $request->input('query');
+        $query->select('products.*', 'companies.company_name') ->join('companies', 'products.company_id', '=', 'companies.id');
         
         // 検索処理
-        $results = YourModel::where('name', 'LIKE', "%{$query}%")->get();
-        if($search = $request->search){
+        if($search = $request->keyword){
             $query->where('product_name','LIKE',"%{$search}%");
         }
 
-        if($search = $request->search){
-            $query->where('compnay_name',  'LIKE', "%{$search}%");
+        if($search = $request->company){
+            $query->where('compnay_id',  'LIKE', "%{$search}%");
         }
-    
         
-        $products = $query->paginate(10);
-        $products = Product::all();
-        $companies = Company::get();
-        $products = Product::sortable()->get(); //sortable() を先に宣言 
+        // 最小価格が指定されている場合、その価格以上の商品をクエリに追加
+    if($min_price = $request->min_price){
+        $query->where('price', '>=', $min_price);
+    }
+
+    // 最大価格が指定されている場合、その価格以下の商品をクエリに追加
+    if($max_price = $request->max_price){
+        $query->where('price', '<=', $max_price);
+    }
+
+    // 最小在庫数が指定されている場合、その在庫数以上の商品をクエリに追加
+    if($min_stock = $request->min_stock){
+        $query->where('stock', '>=', $min_stock);
+    }
+
+    // 最大在庫数が指定されている場合、その在庫数以下の商品をクエリに追加
+    if($max_stock = $request->max_stock){
+        $query->where('stock', '<=', $max_stock);
+    }
+        
+        $products = $query->get();
+        $companies = Company::all();
         return response()->json([
-            'list' => view('products.index', ['products' => $products])->render()
+            'data' => $products
         ]);
     }
 

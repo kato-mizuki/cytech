@@ -17,13 +17,13 @@
             
             {{-- 以下、検索項目入力欄   --}}
             <div class="form-group col-sm-12 col-md-3">
-                <input type="text" id="search" class="form-control" placeholder="検索キーワード" value="{{ request('search') }}">
+                <input type="text" id="search Keyword" class="form-control" placeholder="検索キーワード" value="{{ request('search') }}">
             </div>
 
             <!-- メーカー名の入力欄 -->
             <div class="col-sm-12 col-md-4">
                 <select name="medium" data-toggle="select">
-                    <option disabled style='display:none;' @if (empty($post->company_name)) selected @endif>メーカー名</option>
+                    <option disabled style='display:none;'id="CompanyId" @if (empty($post->company_name)) selected @endif>メーカー名</option>
                     @foreach ($companies as $company)
                         <option value="{{ $company->id }}">{{ $company->company_name }}</option>
                     @endforeach
@@ -39,7 +39,7 @@
             </div>
 
             <div class="form-group col-sm-12 col-md-3">
-                <button class="btn btn-outline-secondary" type="submit">検索</button>
+                <button class="btn btn-outline-secondary" type="submit" id="btnSearch">検索</button>
             </div>
 
         </form>

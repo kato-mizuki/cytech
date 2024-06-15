@@ -16,13 +16,13 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('search') }}" defer></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
     <script>
         let homeUrl = '{{ asset("storage") }}';
         console.log(homeUrl);
     </script>
-    <script src="{{ asset('public/index.js') }}" defer></script>
     <script src="{{ asset('js/delete.js') }}" defer></script>
 
     <!-- Fonts -->
@@ -34,7 +34,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/cytech.css') }}" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="/resources/js/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+    <script src="{{ asset('public/index.js') }}" defer></script>
 </head>
 <body>
     <main class="py-4 mb-5">
