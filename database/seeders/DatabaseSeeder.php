@@ -25,13 +25,13 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         DB::table('companies')->insert([
-            'id' => 1,
+            'id' => 4,
             'company_name' => 'flower',
             'street_address' => '〒105-0011 東京都港区芝公園４丁目２−８',
             'representative' => '加藤',
 
-            'id' => 2,
-            'company_name' => 'tree',
+            'id' => 7,
+            'company_name' => 'rose',
             'street_address' => '東京都港区芝公園４丁目２−８',
             'representative' => '瑞貴'
         ]);
