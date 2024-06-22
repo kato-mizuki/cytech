@@ -17,7 +17,7 @@
             
             {{-- 以下、検索項目入力欄   --}}
             <div class="form-group col-sm-12 col-md-3">
-                <input type="text" id="search Keyword" class="form-control" placeholder="検索キーワード" value="{{ request('search') }}">
+                <input name="keyword" type="text" id="search Keyword" class="form-control" placeholder="検索キーワード" value="{{ request('search') }}">
             </div>
 
             <!-- メーカー名の入力欄 -->
