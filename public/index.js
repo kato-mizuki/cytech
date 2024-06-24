@@ -47,14 +47,13 @@ var csrfToken = $('meta[name="csrf-token"]').attr('content');
     $('#btnSearch').click(function(e){
       e.preventDefault(); 
       var url = $(this).data('url');
+      let $keyword = $('#search Keyword').val();
       let $company = $('#CompanyId').val();
-      let $keyword = $('#Keyword').val();
       let $min_price = $('#minPrice').val();
       let $max_price = $('#maxPrice').val();
       let $min_stock = $('#minStock').val();
       let $max_stock = $('#maxStock').val();
-      var url = $(this).data('url');
-
+    
       $.ajax({
         type: 'GET', 
         url: url,

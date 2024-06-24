@@ -39,7 +39,7 @@
             </div>
 
             <div class="form-group col-sm-12 col-md-3">
-                <button class="btn btn-outline-secondary" type="submit" id="btnSearch">検索</button>
+                <button class="btn btn-outline-secondary" type="submit" id="btnSearch" date-url="{{ route('products.index') }}">検索</button>
             </div>
 
         </form>
