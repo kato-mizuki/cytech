@@ -47,31 +47,33 @@ class ProductController extends Controller
         }
         
         // 最小価格が指定されている場合、その価格以上の商品をクエリに追加
-    if($min_price = $request->min_price){
-        $query->where('price', '>=', $min_price);
-    }
+        if($min_price = $request->min_price){
+            $query->where('price', '>=', $min_price);
+        }
 
-    // 最大価格が指定されている場合、その価格以下の商品をクエリに追加
-    if($max_price = $request->max_price){
-        $query->where('price', '<=', $max_price);
-    }
+        // 最大価格が指定されている場合、その価格以下の商品をクエリに追加
+        if($max_price = $request->max_price){
+            $query->where('price', '<=', $max_price);
+        }
 
-    // 最小在庫数が指定されている場合、その在庫数以上の商品をクエリに追加
-    if($min_stock = $request->min_stock){
-        $query->where('stock', '>=', $min_stock);
-    }
+        // 最小在庫数が指定されている場合、その在庫数以上の商品をクエリに追加
+        if($min_stock = $request->min_stock){
+            $query->where('stock', '>=', $min_stock);
+        }
 
-    // 最大在庫数が指定されている場合、その在庫数以下の商品をクエリに追加
-    if($max_stock = $request->max_stock){
-        $query->where('stock', '<=', $max_stock);
-    }
-        
-        $products = $query->get();
-        $companies = Company::all();
-        return response()->json([
-            'data' => $products
-        ]);
-    }
+        // 最大在庫数が指定されている場合、その在庫数以下の商品をクエリに追加
+        if($max_stock = $request->max_stock){
+            $query->where('stock', '<=', $max_stock);
+        }
+
+         $products = $query->paginate(10)->appends($request->all());
+            
+            $products = $query->get();
+            $companies = Company::all();
+            return response()->json([
+                'data' => $products
+            ]);
+        }
 
     
 
