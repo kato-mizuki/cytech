@@ -21,12 +21,12 @@ var csrfToken = $('meta[name="csrf-token"]').attr('content');
         // Ajaxリクエストを送信
         $.ajax({
             type: 'POST', 
-            url: url,
+            url: 'delete',
             data: {
                 _token: csrfToken,
                 _method: 'DELETE' // LaravelでPOSTをDELETEリクエストとして処理する
             },
-            dataType: 'json',
+            //dataType: 'json',
 
             }).done(function(response) {
                 // 成功時の処理
@@ -46,7 +46,7 @@ var csrfToken = $('meta[name="csrf-token"]').attr('content');
   $(function() {
     $('#btnSearch').click(function(e){
       e.preventDefault(); 
-      var url = $(this).data('url');
+      var url = $(this).data('search');
       let $keyword = $('#search Keyword').val();
       let $company = $('#CompanyId').val();
       let $min_price = $('#minPrice').val();
@@ -56,7 +56,7 @@ var csrfToken = $('meta[name="csrf-token"]').attr('content');
     
       $.ajax({
         type: 'GET', 
-        url: url,
+        url: 'search',
         data: { 
                 _token: csrfToken,
                 "keyword": $keyword,
@@ -66,7 +66,7 @@ var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 "min_stock": $min_stock,
                 "max_stock": $max_stock, 
               },
-        dataType:'json',
+        // dataType:'json',
   
       }).done(function(products){
           let table = $('.table tbody');
