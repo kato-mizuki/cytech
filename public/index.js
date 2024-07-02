@@ -21,7 +21,7 @@ var csrfToken = $('meta[name="csrf-token"]').attr('content');
         // Ajaxリクエストを送信
         $.ajax({
             type: 'POST', 
-            url: 'delete',
+            url: 'delete/' + id,
             data: {
                 _token: csrfToken,
                 _method: 'DELETE' // LaravelでPOSTをDELETEリクエストとして処理する

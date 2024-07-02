@@ -43,7 +43,7 @@ class ProductController extends Controller
         }
 
         if($search = $request->company){
-            $query->where('compnay_id',  'LIKE', "%{$search}%");
+            $query->where('company_id',  'LIKE', "%{$search}%");
         }
         
         // 最小価格が指定されている場合、その価格以上の商品をクエリに追加
@@ -237,7 +237,7 @@ class ProductController extends Controller
             return back();
         }
 
-        return redirect()->route('products.index')
+        return redirect()->route('products')
             ->with('success', 'Product updated successfully');
         //→ビューにメッセージを送る(代入：success)
         
@@ -268,7 +268,7 @@ class ProductController extends Controller
             report($e);
             session()->flash('flash_message', '削除が失敗しました');
         }
-        return redirect()->route('products.index')
+        return redirect()->route('products')
             ->with('success', 'Product deleted successfully');
     }
     public function cart($id) {
